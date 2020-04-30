@@ -37,7 +37,7 @@ class AsynqroConan(ConanFile):
         if not self._cmake:
             self._cmake = CMake(self)
             self._cmake.definitions["ASYNQRO_BUILD_TESTS"] = False
-            self._cmake.definitions["BUILD_SHARED_LIBS"] = self.settings.shared
+            self._cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
             self._cmake.definitions["ASYNQRO_QT_SUPPORT"] = self.options.with_qt
             self._cmake.definitions["ASYNQRO_BUILD_WITH_GCOV"] = False
             self._cmake.definitions["ASYNQRO_BUILD_WITH_DUMMY"] = False

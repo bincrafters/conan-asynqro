@@ -35,7 +35,7 @@ class AsynqroConan(ConanFile):
             tools.check_min_cppstd(self, minimal_cpp_standard)
         minimal_version = {
             "gcc": "7",
-            "clang": "4",
+            "clang": "6",
             "apple-clang": "10",
             "Visual Studio": "15"
         }

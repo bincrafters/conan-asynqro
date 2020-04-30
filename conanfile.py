@@ -34,10 +34,10 @@ class AsynqroConan(ConanFile):
         if self.settings.compiler.cppstd:
             tools.check_min_cppstd(self, minimal_cpp_standard)
         minimal_version = {
-            "gcc": "6",
-            "clang": "3.9",
+            "gcc": "7",
+            "clang": "4",
             "apple-clang": "10",
-            "Visual Studio": "17"
+            "Visual Studio": "15"
         }
         compiler = str(self.settings.compiler)
         if compiler not in minimal_version:

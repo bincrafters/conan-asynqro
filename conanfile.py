@@ -21,7 +21,7 @@ class AsynqroConan(ConanFile):
     _cmake = None
 
     def requirements(self):
-        if self.options["with_qt"] == True:
+        if self.options.with_qt == True:
             self.requires = ("qt/5.14.2@bincrafters/stable")
 
     def config_options(self):
@@ -37,8 +37,8 @@ class AsynqroConan(ConanFile):
         if not self._cmake:
             self._cmake = CMake(self)
             self._cmake.definitions["ASYNQRO_BUILD_TESTS"] = False
-            self._cmake.definitions["BUILD_SHARED_LIBS"] = self.settings["shared"]
-            self._cmake.definitions["ASYNQRO_QT_SUPPORT"] = self.options["with_qt"]
+            self._cmake.definitions["BUILD_SHARED_LIBS"] = self.settings.shared
+            self._cmake.definitions["ASYNQRO_QT_SUPPORT"] = self.options.with_qt
             self._cmake.definitions["ASYNQRO_BUILD_WITH_GCOV"] = False
             self._cmake.definitions["ASYNQRO_BUILD_WITH_DUMMY"] = False
             self._cmake.configure(build_folder=self._build_subfolder)

@@ -8,7 +8,7 @@ class AsynqroConan(ConanFile):
     topics = ("conan", "asynqro", "future", "promise")
     url = "https://github.com/bincrafters/conan-asynqro"
     homepage = "https://github.com/dkormalev/asynqro"
-    license = "MIT"  # Indicates license type of the packaged library; please use SPDX Identifiers https://spdx.org/licenses/
+    license = "BSD-3-Clause"
     exports_sources = ["CMakeLists.txt"]
     generators = "cmake"
 
@@ -21,12 +21,33 @@ class AsynqroConan(ConanFile):
     _cmake = None
 
     def requirements(self):
-        if self.options.with_qt == True:
+        if self.options.with_qt:
             self.requires = ("qt/5.14.2@bincrafters/stable")
 
     def config_options(self):
         if self.settings.os == 'Windows':
             del self.options.fPIC
+
+    def configure(self):
+        minimal_cpp_standard = "17"
+        if self.settings.compiler.cppstd:
+            tools.check_min_cppstd(self, minimal_cpp_standard)
+        minimal_version = {
+            "gcc": "6",
+            "clang": "3.9",
+            "apple-clang": "10",
+            "Visual Studio": "17"
+        }
+        compiler = str(self.settings.compiler)
+        if compiler not in minimal_version:
+            self.output.warn(
+                "%s recipe lacks information about the %s compiler standard version support." % (self.name, compiler))
+            self.output.warn(
+                "%s requires a compiler that supports at least C++%s." % (self.name, minimal_cpp_standard))
+            return
+        version = tools.Version(self.settings.compiler.version)
+        if version < minimal_version[compiler]:
+            raise ConanInvalidConfiguration("%s requires a compiler that supports at least C++%s." % (self.name, minimal_cpp_standard))
 
     def source(self):
         tools.get(**self.conan_data["sources"][self.version])
@@ -37,7 +58,6 @@ class AsynqroConan(ConanFile):
         if not self._cmake:
             self._cmake = CMake(self)
             self._cmake.definitions["ASYNQRO_BUILD_TESTS"] = False
-            self._cmake.definitions["BUILD_SHARED_LIBS"] = self.options.shared
             self._cmake.definitions["ASYNQRO_QT_SUPPORT"] = self.options.with_qt
             self._cmake.definitions["ASYNQRO_BUILD_WITH_GCOV"] = False
             self._cmake.definitions["ASYNQRO_BUILD_WITH_DUMMY"] = False
@@ -52,6 +72,9 @@ class AsynqroConan(ConanFile):
         self.copy(pattern="LICENSE", dst="licenses", src=self._source_subfolder)
         cmake = self._configure_cmake()
         cmake.install()
+        tools.rmdir(os.path.join(self.package_folder, "lib", "cmake"))
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
+        if self.settings.os == "Linux":
+            self.cpp_info.system_libs = ["pthread"]

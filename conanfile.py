@@ -20,10 +20,9 @@ class AsynqroConan(ConanFile):
     _build_subfolder = "build_subfolder"
     _cmake = None
 
-    if self.options["with_qt"] == True:
-        requires = (
-            "qt/5.14.2@bincrafters/stable"
-        )
+    def requirements(self):
+        if self.options["with_qt"] == True:
+            self.requires = ("qt/5.14.2@bincrafters/stable")
 
     def config_options(self):
         if self.settings.os == 'Windows':

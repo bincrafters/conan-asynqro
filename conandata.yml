@@ -1,4 +1,4 @@
 sources:
-  "1.0.0":
-    url: "https://github.com/libauthor/libname"
-    sha256: "98f6f57aab0a424469619ed3047728f0d3901ce8f0dea919c11e7966d807e870"
+  "0.7.0":
+    url: "https://github.com/dkormalev/asynqro/archive/0.7.0.tar.gz"
+    sha256: "ed7d42d2cccc542069072e9966f6a89f42f787615f8bf32f7fe20be34a4e871a"

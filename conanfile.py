@@ -23,7 +23,7 @@ class AsynqroConan(ConanFile):
 
     def requirements(self):
         if self.options.with_qt:
-            self.requires = ("qt/5.14.2@bincrafters/stable")
+            self.requires = ("qt/5.15.2")
 
     def config_options(self):
         if self.settings.os == 'Windows':
